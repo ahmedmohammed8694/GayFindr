@@ -1,0 +1,25 @@
+{
+  "name": "gayfindr",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "deploy:build": "npm run build && docker build -t gayfindr-backend .",
+    "deploy:local": "docker-compose up --build",
+    "deploy:prod": "npm run deploy:build && echo 'Image built. Push to your container registry.'",
+    "start": "npx serve -s . -p 3001",
+    "frontend:init": "npx create-expo-app@latest frontend --template blank-typescript"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "turbo": "latest",
+    "serve": "^14.2.1"
+  },
+  "packageManager": "npm@10.2.4",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connectr - Grindr Style UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: { primary: '#000000', surface: '#111111', elevated: '#1A1A1E' },
+                        text: { primary: '#FFFFFF', secondary: '#A1A1AA', tertiary: '#71717A' },
+                        brand: { DEFAULT: '#FFD400', hover: '#E6BF00', pressed: '#CCAA00' },
+                        status: { online: '#10B981', offline: '#6B7280' },
+                        chat: { sent: '#FFD400', received: '#1F1F23', sentText: '#000000', receivedText: '#FFFFFF' },
+                        border: { DEFAULT: '#26262A', subtle: '#1A1A1E' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bg-primary text-text-primary font-sans overflow-x-hidden">
+    <div class="demo-note fixed top-2 left-1/2 transform -translate-x-1/2 bg-brand/10 border border-brand text-brand px-4 py-2 rounded-full text-xs z-50">
+        🎨 Connectr UI Demo - Grindr Style
+    </div>
+    
+    <div class="max-w-sm mx-auto min-h-screen">
+        <!-- Auth Check -->
+        <div id="authCheck" class="fixed inset-0 bg-bg-primary flex items-center justify-center z-50">
+            <div class="text-center">
+                <div class="w-16 h-16 border-4 border-brand border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p class="text-text-secondary">Loading...</p>
+            </div>
+        </div>
+        
+        <!-- Main App -->
+        <div id="mainApp" class="hidden">
+        <div class="flex justify-between items-center p-5 border-b border-border">
+            <h1 class="text-xl font-bold">Explore</h1>
+            <button class="text-brand text-2xl hover:text-brand-hover transition-colors">⚙️</button>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-2 p-4">
+            <div class="bg-bg-surface rounded-md overflow-hidden relative aspect-square cursor-pointer hover:scale-105 transition-transform" onclick="openProfile('Alex', 25)">
+                <div class="w-full h-3/4 bg-gradient-to-br from-gray-600 to-gray-800 relative">
+                    <div class="w-3 h-3 bg-status-online rounded-full absolute top-2 right-2 border-2 border-bg-primary"></div>
+                    <div class="absolute bottom-2 left-2 bg-black/70 px-2 py-1 rounded-full text-xs font-semibold">
+                        Nearby
+                    </div>
+                </div>
+                <div class="p-2 flex justify-between items-center">
+                    <span class="font-semibold">Alex</span>
+                    <span class="text-text-secondary text-xs">25</span>
+                </div>
+            </div>
+            
+            <div class="bg-bg-surface rounded-md overflow-hidden relative aspect-square cursor-pointer hover:scale-105 transition-transform" onclick="openProfile('Jordan', 28)">
+                <div class="w-full h-3/4 bg-gradient-to-br from-gray-600 to-gray-800 relative">
+                    <div class="absolute bottom-2 left-2 bg-black/70 px-2 py-1 rounded-full text-xs font-semibold">
+                        ~1km
+                    </div>
+                </div>
+                <div class="p-2 flex justify-between items-center">
+                    <span class="font-semibold">Jordan</span>
+                    <span class="text-text-secondary text-xs">28</span>
+                </div>
+            </div>
+            
+            <div class="bg-bg-surface rounded-md overflow-hidden relative aspect-square cursor-pointer hover:scale-105 transition-transform" onclick="openProfile('Sam', 24)">
+                <div class="w-full h-3/4 bg-gradient-to-br from-gray-600 to-gray-800 relative">
+                    <div class="w-3 h-3 bg-status-online rounded-full absolute top-2 right-2 border-2 border-bg-primary"></div>
+                    <div class="absolute bottom-2 left-2 bg-black/70 px-2 py-1 rounded-full text-xs font-semibold">
+                        ~500m
+                    </div>
+                </div>
+                <div class="p-2 flex justify-between items-center">
+                    <span class="font-semibold">Sam</span>
+                    <span class="text-text-secondary text-xs">24</span>
+                </div>
+            </div>
+            
+            <div class="bg-bg-surface rounded-md overflow-hidden relative aspect-square cursor-pointer hover:scale-105 transition-transform" onclick="openProfile('Taylor', 30)">
+                <div class="w-full h-3/4 bg-gradient-to-br from-gray-600 to-gray-800 relative">
+                    <div class="absolute bottom-2 left-2 bg-black/70 px-2 py-1 rounded-full text-xs font-semibold">
+                        ~2km
+                    </div>
+                </div>
+                <div class="p-2 flex justify-between items-center">
+                    <span class="font-semibold">Taylor</span>
+                    <span class="text-text-secondary text-xs">30</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profile Modal -->
+        <div id="profileModal" class="fixed inset-0 bg-black/90 z-50 hidden">
+            <div class="h-full flex flex-col">
+                <div class="flex justify-end p-4">
+                    <button onclick="closeProfile()" class="text-brand text-2xl">&times;</button>
+                </div>
+                <div class="flex-1 flex flex-col items-center justify-center text-center px-8">
+                    <div class="w-32 h-32 bg-gradient-to-br from-gray-600 to-gray-800 rounded-full mb-4"></div>
+                    <h2 id="profileName" class="text-2xl font-bold mb-2"></h2>
+                    <p id="profileAge" class="text-text-secondary mb-6"></p>
+                    <div class="flex gap-4">
+                        <button class="bg-brand text-black px-6 py-3 rounded-full font-semibold">Message</button>
+                        <button class="bg-bg-surface text-text-primary px-6 py-3 rounded-full">❤️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-sm bg-bg-surface border-t border-border flex h-16">
+            <div class="flex-1 flex flex-col items-center justify-center text-brand cursor-pointer">
+                <div class="text-xl mb-1">⊞</div>
+                <div class="text-xs">Explore</div>
+            </div>
+            <div class="flex-1 flex flex-col items-center justify-center text-text-tertiary cursor-pointer hover:text-text-secondary transition-colors">
+                <div class="text-xl mb-1">💬</div>
+                <div class="text-xs">Chats</div>
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+<script>
+    // Check authentication on load
+    window.onload = function() {
+        setTimeout(() => {
+            const isLoggedIn = localStorage.getItem('connectr_auth');
+            if (!isLoggedIn) {
+                window.location.href = 'login.html';
+            } else {
+                document.getElementById('authCheck').classList.add('hidden');
+                document.getElementById('mainApp').classList.remove('hidden');
+            }
+        }, 1000);
+    };
+    
+    function openProfile(name, age) {
+        document.getElementById('profileName').textContent = name;
+        document.getElementById('profileAge').textContent = age + ' years old';
+        document.getElementById('profileModal').classList.remove('hidden');
+    }
+    
+    function closeProfile() {
+        document.getElementById('profileModal').classList.add('hidden');
+    }
+    
+    function logout() {
+        localStorage.removeItem('connectr_auth');
+        window.location.href = 'login.html';
+    }
+</script>
+</html>

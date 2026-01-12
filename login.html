@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connectr - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: { primary: '#000000', surface: '#111111', elevated: '#1A1A1E' },
+                        text: { primary: '#FFFFFF', secondary: '#A1A1AA', tertiary: '#71717A' },
+                        brand: { DEFAULT: '#FFD400', hover: '#E6BF00', pressed: '#CCAA00' },
+                        status: { online: '#10B981', offline: '#6B7280', error: '#EF4444' },
+                        border: { DEFAULT: '#26262A', subtle: '#1A1A1E' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bg-primary text-text-primary font-sans min-h-screen">
+    <div class="max-w-sm mx-auto min-h-screen flex flex-col justify-center p-6">
+        
+        <!-- Logo/Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-brand mb-2">Connectr</h1>
+            <p class="text-text-secondary">Connect with people nearby</p>
+        </div>
+
+        <!-- Phone Input Screen -->
+        <div id="phoneScreen" class="space-y-6">
+            <div class="text-center">
+                <h2 class="text-xl font-semibold mb-2">Enter your phone number</h2>
+                <p class="text-text-secondary text-sm">We'll send you a verification code</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="flex gap-3">
+                    <select class="bg-bg-surface border border-border rounded-lg px-3 py-3 text-text-primary">
+                        <option>+1</option>
+                        <option>+44</option>
+                        <option>+91</option>
+                    </select>
+                    <input 
+                        id="phoneInput"
+                        type="tel" 
+                        placeholder="Phone number"
+                        class="flex-1 bg-bg-surface border border-border rounded-lg px-4 py-3 text-text-primary placeholder-text-tertiary focus:border-brand focus:outline-none"
+                    />
+                </div>
+                
+                <button 
+                    onclick="sendOTP()"
+                    class="w-full bg-brand text-black font-semibold py-3 rounded-lg hover:bg-brand-hover transition-colors"
+                >
+                    Send Code
+                </button>
+            </div>
+            
+            <div class="text-center">
+                <p class="text-text-tertiary text-xs">
+                    By continuing, you agree to our Terms of Service and Privacy Policy
+                </p>
+            </div>
+        </div>
+
+        <!-- OTP Verification Screen -->
+        <div id="otpScreen" class="space-y-6 hidden">
+            <div class="text-center">
+                <h2 class="text-xl font-semibold mb-2">Enter verification code</h2>
+                <p class="text-text-secondary text-sm">
+                    We sent a code to <span id="phoneDisplay" class="text-brand"></span>
+                </p>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="flex gap-2 justify-center">
+                    <input type="text" maxlength="1" class="w-12 h-12 bg-bg-surface border border-border rounded-lg text-center text-xl font-semibold focus:border-brand focus:outline-none" oninput="moveToNext(this, 0)"/>
+                    <input type="text" maxlength="1" class="w-12 h-12 bg-bg-surface border border-border rounded-lg text-center text-xl font-semibold focus:border-brand focus:outline-none" oninput="moveToNext(this, 1)"/>
+                    <input type="text" maxlength="1" class="w-12 h-12 bg-bg-surface border border-border rounded-lg text-center text-xl font-semibold focus:border-brand focus:outline-none" oninput="moveToNext(this, 2)"/>
+                    <input type="text" maxlength="1" class="w-12 h-12 bg-bg-surface border border-border rounded-lg text-center text-xl font-semibold focus:border-brand focus:outline-none" oninput="moveToNext(this, 3)"/>
+                    <input type="text" maxlength="1" class="w-12 h-12 bg-bg-surface border border-border rounded-lg text-center text-xl font-semibold focus:border-brand focus:outline-none" oninput="moveToNext(this, 4)"/>
+                    <input type="text" maxlength="1" class="w-12 h-12 bg-bg-surface border border-border rounded-lg text-center text-xl font-semibold focus:border-brand focus:outline-none" oninput="moveToNext(this, 5)"/>
+                </div>
+                
+                <button 
+                    onclick="verifyOTP()"
+                    class="w-full bg-brand text-black font-semibold py-3 rounded-lg hover:bg-brand-hover transition-colors"
+                >
+                    Verify
+                </button>
+                
+                <div class="text-center">
+                    <button onclick="resendOTP()" class="text-brand text-sm hover:underline">
+                        Didn't receive code? Resend
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Setup Screen -->
+        <div id="profileScreen" class="space-y-6 hidden">
+            <div class="text-center">
+                <h2 class="text-xl font-semibold mb-2">Complete your profile</h2>
+                <p class="text-text-secondary text-sm">Tell us about yourself</p>
+            </div>
+            
+            <div class="space-y-4">
+                <input 
+                    type="text" 
+                    placeholder="Display name"
+                    class="w-full bg-bg-surface border border-border rounded-lg px-4 py-3 text-text-primary placeholder-text-tertiary focus:border-brand focus:outline-none"
+                />
+                
+                <input 
+                    type="date" 
+                    class="w-full bg-bg-surface border border-border rounded-lg px-4 py-3 text-text-primary focus:border-brand focus:outline-none"
+                />
+                
+                <textarea 
+                    placeholder="Bio (optional)"
+                    rows="3"
+                    class="w-full bg-bg-surface border border-border rounded-lg px-4 py-3 text-text-primary placeholder-text-tertiary focus:border-brand focus:outline-none resize-none"
+                ></textarea>
+                
+                <button 
+                    onclick="completeSignup()"
+                    class="w-full bg-brand text-black font-semibold py-3 rounded-lg hover:bg-brand-hover transition-colors"
+                >
+                    Complete Profile
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentStep = 'phone';
+        
+        function sendOTP() {
+            const phone = document.getElementById('phoneInput').value;
+            if (!phone) {
+                alert('Please enter your phone number');
+                return;
+            }
+            
+            document.getElementById('phoneDisplay').textContent = phone;
+            document.getElementById('phoneScreen').classList.add('hidden');
+            document.getElementById('otpScreen').classList.remove('hidden');
+            currentStep = 'otp';
+        }
+        
+        function moveToNext(current, index) {
+            if (current.value.length === 1 && index < 5) {
+                const inputs = document.querySelectorAll('#otpScreen input[type="text"]');
+                inputs[index + 1].focus();
+            }
+            
+            // Auto-verify when all 6 digits are entered
+            const inputs = document.querySelectorAll('#otpScreen input[type="text"]');
+            const code = Array.from(inputs).map(input => input.value).join('');
+            if (code.length === 6) {
+                setTimeout(() => verifyOTP(), 500);
+            }
+        }
+        
+        function verifyOTP() {
+            const inputs = document.querySelectorAll('#otpScreen input[type="text"]');
+            const code = Array.from(inputs).map(input => input.value).join('');
+            
+            if (code.length !== 6) {
+                alert('Please enter the complete verification code');
+                return;
+            }
+            
+            // Simulate OTP verification
+            document.getElementById('otpScreen').classList.add('hidden');
+            document.getElementById('profileScreen').classList.remove('hidden');
+            currentStep = 'profile';
+        }
+        
+        function resendOTP() {
+            alert('Verification code sent!');
+        }
+        
+        function completeSignup() {
+            // Save auth state
+            localStorage.setItem('connectr_auth', 'true');
+            // Redirect to main app
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
